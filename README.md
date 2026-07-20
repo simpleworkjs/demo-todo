@@ -29,6 +29,8 @@ Demo login:
 - Username: `admin`
 - Password: `Changeme1!`
 
+> Note: `conf/secrets.js` is intentionally not committed. The app will still start with a harmless warning from `@simpleworkjs/conf`; create the file locally if you need to add real secrets.
+
 ## What this demonstrates
 
 - **Models** in `models/` extend `@simpleworkjs/orm-identity`'s `Model` base.
