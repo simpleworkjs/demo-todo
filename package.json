@@ -1,0 +1,18 @@
+{
+  "name": "demo-todo",
+  "version": "0.1.0",
+  "description": "Todo/Project demo app and golden path starter for SimpleWorkJS",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node --test test/**/*.test.js"
+  },
+  "dependencies": {
+    "@simpleworkjs/backend": "^0.1.0",
+    "@simpleworkjs/conf": "^1.2.0",
+    "@simpleworkjs/orm-identity": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
