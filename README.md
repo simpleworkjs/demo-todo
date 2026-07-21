@@ -40,6 +40,35 @@ Demo login:
 - **RBAC** declared per model with `static permissions = {}`.
 - **Built-in identity** (`User`, `Group`, `Role`, `Permission`, `AuthToken`) loaded automatically.
 - **Live sync** — open two browsers and watch tasks update in real time.
+- **Exposed methods** — custom model methods published as REST endpoints (below).
+
+## Exposed methods
+
+Beyond CRUD, the demo models publish a few of their own domain methods as REST
+endpoints using `static exposedMethods` (see the
+[`@simpleworkjs/backend` docs](https://github.com/simpleworkjs/backend#exposed-methods)).
+Instance methods mount under `/:id`; static methods mount at the model root.
+All are gated by the same `static permissions` (the verb picks the default
+action — `post`→`update`, `get`→`read`).
+
+| Method | Endpoint | Kind |
+|--------|----------|------|
+| `Task.complete()` | `POST /api/Task/:id/complete` | instance |
+| `Task.reopen()` | `POST /api/Task/:id/reopen` | instance |
+| `Task.setPriority(level)` | `PUT /api/Task/:id/priority/:level` | instance (path-param arg) |
+| `Project.archive()` | `POST /api/Project/:id/archive` | instance |
+| `Project.stats()` | `GET /api/Project/stats` | static |
+
+```bash
+# mark a task done (needs a bearer token; admin owns the seeded rows)
+curl -X POST http://localhost:3000/api/Task/<id>/complete \
+  -H "Authorization: Bearer <token>"
+
+# project counts
+curl http://localhost:3000/api/Project/stats -H "Authorization: Bearer <token>"
+```
+
+They're also discoverable at `OPTIONS /api/Task` under `paths.methods`.
 
 ## The golden path
 

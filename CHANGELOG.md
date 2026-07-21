@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Added
+
+- **Exposed method examples.** `Task` publishes `complete` / `reopen` /
+  `setPriority` (instance methods) and `Project` publishes `archive` (instance)
+  and `stats` (static) as REST endpoints via `static exposedMethods`, with an
+  end-to-end HTTP test. Requires `@simpleworkjs/backend` ≥ 0.2.1 and
+  `@simpleworkjs/orm` ≥ 0.2.1 (resolved automatically by the `^0.2.0` ranges
+  once published).
+
 ### Changed
 
 - Bumped `@simpleworkjs/backend` and `@simpleworkjs/orm-identity` to `^0.2.0`

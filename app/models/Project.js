@@ -25,6 +25,26 @@ class Project extends Model {
     update: ['admin', 'owner'],
     delete: ['admin'],
   };
+
+  // Exposed methods can be instance *or* static — auto-detected. `stats` exists
+  // on the class, so it mounts at the model root; `archive` is an instance
+  // method, so it mounts under /:pk.
+  static exposedMethods = [
+    // GET /api/Project/stats   (static; get -> requires read)
+    {method: 'stats', verb: 'get', description: 'Total and active project counts'},
+    // POST /api/Project/:id/archive   (instance; post -> requires update)
+    {method: 'archive', verb: 'post', description: 'Mark this project inactive'},
+  ];
+
+  static async stats() {
+    const all = await this.list({});
+    return {total: all.length, active: all.filter(p => p.active).length};
+  }
+
+  async archive() {
+    await this.update({active: false});
+    return this;
+  }
 }
 
 module.exports = Project;

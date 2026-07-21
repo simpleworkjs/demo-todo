@@ -27,6 +27,37 @@ class Task extends Model {
     update: ['admin', 'owner'],
     delete: ['admin'],
   };
+
+  // Custom domain methods exposed as REST endpoints. See the framework's
+  // "Exposed methods" docs. Instance methods mount under /:pk; the verb sets
+  // the default permission (post -> update, get -> read), so these inherit the
+  // model's `update` rule (admin or the task's owner).
+  static exposedMethods = [
+    // POST /api/Task/:id/complete
+    {method: 'complete', verb: 'post', description: 'Mark this task done'},
+    // POST /api/Task/:id/reopen
+    {method: 'reopen', verb: 'post', description: 'Mark this task not done'},
+    // PUT /api/Task/:id/priority/:level   (arg comes from the path)
+    {method: 'setPriority', route: 'priority', verb: 'put',
+      args: {from: 'params', names: ['level']},
+      description: 'Set this task’s priority (1–5)'},
+  ];
+
+  async complete() {
+    await this.update({done: true});
+    return this; // `this.done` is now fresh after update()
+  }
+
+  async reopen() {
+    await this.update({done: false});
+    return this;
+  }
+
+  async setPriority(level) {
+    const clamped = Math.max(1, Math.min(5, Number(level) || 1));
+    await this.update({priority: clamped});
+    return this;
+  }
 }
 
 module.exports = Task;

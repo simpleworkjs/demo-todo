@@ -38,3 +38,41 @@ test('demo app seeds and can login as admin', async () => {
 
   await app.close();
 });
+
+test('exposed methods: instance and static endpoints work over HTTP', async () => {
+  const app = backend({conf, models});
+  await app.init();
+  const port = await new Promise((resolve, reject) => {
+    app.http.listen(0, err => (err ? reject(err) : resolve(app.http.address().port)));
+  });
+  const base = `http://localhost:${port}`;
+
+  try {
+    const user = await login(app.models, 'admin', 'Changeme1!');
+    const token = await ormIdentity.auth.issueAuthToken(user, app.models, 'test');
+    const headers = {Authorization: `Bearer ${token.token}`, 'Content-Type': 'application/json'};
+
+    const task = await app.models.Task.create({title: 'exposed-demo', createdById: user.id});
+
+    // Instance method: POST /api/Task/:id/complete
+    const done = await fetch(`${base}/api/Task/${task.id}/complete`, {method: 'POST', headers});
+    assert.equal(done.status, 200);
+    assert.equal((await done.json()).data.done, true);
+
+    // Instance method with a path-param arg: PUT /api/Task/:id/priority/:level
+    const prio = await fetch(`${base}/api/Task/${task.id}/priority/4`, {method: 'PUT', headers});
+    assert.equal((await prio.json()).data.priority, 4);
+
+    // Static method: GET /api/Project/stats
+    const stats = await fetch(`${base}/api/Project/stats`, {headers});
+    assert.equal(stats.status, 200);
+    assert.equal(typeof (await stats.json()).data.total, 'number');
+
+    // Exposed methods are discoverable through OPTIONS.
+    const opts = await fetch(`${base}/api/Task`, {method: 'OPTIONS', headers});
+    const methodNames = (await opts.json()).paths.methods.map(m => m.method);
+    assert.ok(methodNames.includes('complete'), 'complete advertised in OPTIONS');
+  } finally {
+    await app.close();
+  }
+});
