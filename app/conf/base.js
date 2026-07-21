@@ -15,19 +15,10 @@ module.exports = {
     port: 3000,
   },
 
-  database: {
+  orm: {
     dialect: 'sqlite',
     storage: 'data.sqlite',
     logging: false,
-  },
-
-  redis: {
-    enabled: false,
-    prefix: 'demo_todo:',
-  },
-
-  ldap: {
-    enabled: false,
   },
 
   pubsub: {
