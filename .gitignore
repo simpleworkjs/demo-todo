@@ -2,6 +2,7 @@ node_modules/
 data*.sqlite
 *.log
 .DS_Store
+app/conf/secrets.js
 conf/secrets.js
 package-lock.json
 /tmp/
