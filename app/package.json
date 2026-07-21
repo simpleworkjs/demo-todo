@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "node --test test/**/*.test.js"
+    "test": "node --test"
   },
   "dependencies": {
     "@simpleworkjs/backend": "^0.1.6",
