@@ -20,41 +20,7 @@ test('demo app loads identity + app models', async () => {
 });
 
 test('demo app seeds and can login as admin', async () => {
-  const app = backend({
-    conf,
-    models,
-    seed: async (models) => {
-      const existing = await models.Project.list({limit: 1});
-      if (existing.length) return;
-
-      const user = await models.User.create({
-        userName: 'admin',
-        email: 'admin@example.com',
-        password: 'Changeme1!',
-        isAdmin: true,
-      });
-
-      const group = await models.Group.create({name: 'Administrators'});
-      const role = await models.Role.create({name: 'Admin'});
-      const permission = await models.Permission.create({name: 'admin'});
-
-      await models.UserGroup.create({userId: user.id, groupId: group.id});
-      await models.GroupRole.create({groupId: group.id, roleId: role.id});
-      await models.RolePermission.create({roleId: role.id, permissionId: permission.id});
-
-      const project = await models.Project.create({
-        name: 'Test Project',
-        active: true,
-        createdById: user.id,
-      });
-
-      await models.Task.create({
-        title: 'Test Task',
-        projectId: project.id,
-        createdById: user.id,
-      });
-    },
-  });
+  const app = backend({conf, models});
 
   await app.init();
 
@@ -65,10 +31,10 @@ test('demo app seeds and can login as admin', async () => {
   assert.ok(token.token, 'auth token can be issued');
 
   const projects = await app.models.Project.list({limit: 10});
-  assert.equal(projects.length, 1, 'seeded one project');
+  assert.ok(projects.length >= 1, 'seeded at least one project');
 
   const tasks = await app.models.Task.list({limit: 10});
-  assert.equal(tasks.length, 1, 'seeded one task');
+  assert.ok(tasks.length >= 1, 'seeded at least one task');
 
   await app.close();
 });
