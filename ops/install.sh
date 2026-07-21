@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Install dependencies in the generated build directory.
-BUILD_DIR="/tmp/demo-todo-build"
+APP_DIR="/tmp/demo-todo-build/app"
 
-echo "Installing dependencies in $BUILD_DIR ..."
-cd "$BUILD_DIR"
+echo "Installing dependencies in $APP_DIR ..."
+cd "$APP_DIR"
 npm install
 echo "Install complete."

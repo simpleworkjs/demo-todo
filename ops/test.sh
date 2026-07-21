@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Run the test suite in the generated build directory.
-BUILD_DIR="/tmp/demo-todo-build"
+APP_DIR="/tmp/demo-todo-build/app"
 
-echo "Running tests in $BUILD_DIR ..."
-cd "$BUILD_DIR"
+echo "Running tests in $APP_DIR ..."
+cd "$APP_DIR"
 npm test
 echo "Tests passed."

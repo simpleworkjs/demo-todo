@@ -18,7 +18,7 @@ This repo is three things in one:
 
 ```bash
 git clone git@github.com:simpleworkjs/demo-todo.git
-cd demo-todo
+cd demo-todo/app
 npm install
 npm start
 # open http://localhost:3000
@@ -33,7 +33,7 @@ Demo login:
 
 ## What this demonstrates
 
-- **Models** in `models/` extend `@simpleworkjs/orm-identity`'s `Model` base.
+- **Models** in `app/models/` extend `@simpleworkjs/orm-identity`'s `Model` base.
 - **Auto REST API** at `/api/Project`, `/api/Task`, `/api/User`, etc.
 - **OPTIONS schema endpoints** at the same paths for the UI to build forms.
 - **Server-rendered pages** for list/create/edit/detail views.
@@ -51,12 +51,12 @@ These are the same steps the `ops/full-rebuild.sh` script runs automatically:
 npx simpleworks generate demo-todo /tmp/demo-todo-build
 ```
 
-This creates the scaffold: `app.js`, `package.json`, `conf/`, `models/`, `routes/`, `views/`, `public/`.
+This creates the scaffold under `/tmp/demo-todo-build/app/`: `app.js`, `package.json`, `conf/`, `models/`, `routes/`, `views/`, `public/`.
 
 ### 2. Install dependencies
 
 ```bash
-cd /tmp/demo-todo-build
+cd /tmp/demo-todo-build/app
 npm install
 ```
 
@@ -64,10 +64,10 @@ npm install
 
 Replace the generated files with the demo-specific versions from this repo:
 
-- `app.js` — add the seed function.
-- `conf/base.js` — point to SQLite, disable Redis/LDAP, use bundled UI assets.
-- `models/Project.js` and `models/Task.js` — add the demo models.
-- `test/demo.test.js` — add smoke tests.
+- `app/app.js` — add the seed function.
+- `app/conf/base.js` — point to SQLite, disable Redis/LDAP, use bundled UI assets.
+- `app/models/Project.js` and `app/models/Task.js` — add the demo models.
+- `app/test/demo.test.js` — add smoke tests.
 
 You can also do this by copying the files from this repo:
 
@@ -76,15 +76,14 @@ You can also do this by copying the files from this repo:
 rsync -av \
   --exclude='.git' \
   --exclude='node_modules' \
-  --exclude='ops' \
   --exclude='data*.sqlite' \
-  . /tmp/demo-todo-build/
+  app/ /tmp/demo-todo-build/app/
 ```
 
 ### 4. Run tests
 
 ```bash
-cd /tmp/demo-todo-build
+cd /tmp/demo-todo-build/app
 npm test
 ```
 
@@ -123,8 +122,8 @@ Then inspect `/tmp/demo-todo-build` or start it:
 
 ## Add your own model
 
-1. Create `models/MyModel.js` extending `Model`.
-2. Add it to `models/index.js`.
+1. Create `app/models/MyModel.js` extending `Model`.
+2. Add it to `app/models/index.js`.
 3. Restart the app.
 
 The framework will create the table, REST routes, and pages automatically.
@@ -132,6 +131,7 @@ The framework will create the table, REST routes, and pages automatically.
 ## Tests
 
 ```bash
+cd app
 npm test
 ```
 
