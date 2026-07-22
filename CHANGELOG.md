@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Changed
+
+- Bumped `@simpleworkjs/backend` to `^0.2.5` and `@simpleworkjs/orm-identity` to
+  `^0.2.2` so a fresh install pulls the DB-backed permission stack.
+
 ### Added
 
 - **Exposed method examples.** `Task` publishes `complete` / `reopen` /
